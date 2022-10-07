@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content">
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:paddingVertical="5dp"
+        android:layout_margin="5dp"
+        android:paddingHorizontal="30dp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintEnd_toEndOf="parent" >
+
+<!--        <TextView-->
+<!--            android:id="@+id/contactIV"-->
+<!--            android:layout_width="60dp"-->
+<!--            android:layout_height="60dp"-->
+<!--            android:layout_margin="10dp"-->
+<!--            android:textSize="24sp"-->
+<!--            android:gravity="center"-->
+<!--            android:textAppearance="@style/TextAppearance.Material3.BodyLarge"-->
+<!--            android:background="@drawable/round_bg"-->
+<!--            android:padding="5dp"-->
+<!--            android:scaleType="centerCrop"-->
+<!--             />-->
+
+        <TextView
+            android:id="@+id/contactNameTV"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginHorizontal="10dp"
+            android:layout_marginTop="15dp"
+            android:textSize="18sp"
+            android:text="Contact Name"
+
+            />
+        <TextView
+            android:id="@+id/contactNumberTV"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginHorizontal="10dp"
+            android:layout_marginTop="5dp"
+            android:text="+91-9999999999"
+
+            android:layout_below="@id/contactNameTV"
+            />
+
+
+    </RelativeLayout>
+
+</androidx.constraintlayout.widget.ConstraintLayout>
