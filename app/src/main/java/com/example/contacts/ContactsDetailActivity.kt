@@ -30,17 +30,12 @@ class ContactsDetailActivity : AppCompatActivity() {
         contactId = intent.getStringExtra("contactId").toString()
         val number = intent.getStringExtra("contactNumber")
         val email = intent.getStringExtra("contactEmail")
-//        val color = intent.getIntExtra("color",titleColor)
-//        val initialName = name?.get(0)?.toString()
-//        Toast.makeText(this@ContactsDetailActivity, contactId, Toast.LENGTH_SHORT).show()
-//        Toast.makeText(this@ContactsDetailActivity, name, Toast.LENGTH_SHORT).show()
-//        Toast.makeText(this@ContactsDetailActivity, number, Toast.LENGTH_SHORT).show()
+
 
         binding.nameDetail.setText(name)
-//        binding.initialIV.text = initialName
-//        binding.initialIV.setBackgroundColor(color)
+
         binding.phNumDetail.setText(number)
-//        binding.updateBT.setBackgroundColor(color)
+
         binding.emailDetail.setText(email)
 
 
