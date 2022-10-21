@@ -1,7 +1,6 @@
 package com.example.contacts
 
 import android.content.ContentProviderOperation
-import android.content.Intent
 import android.os.Bundle
 import android.provider.ContactsContract
 import android.util.Log
@@ -21,22 +20,29 @@ class AddContactActivity : AppCompatActivity() {
 
         val names = binding.nameInputET.text
         val numbers = binding.numberInputET.text
+        val email = binding.emailInputET.text
 
         binding.addContactBTN.setOnClickListener {
-            addContact(names.toString(), numbers.toString())
-            Log.d("AddContactActivity","${binding.nameInputET.text} --- ${binding.numberInputET.text}")
+            super.onBackPressed()
+            addContact(names.toString(), numbers.toString(), email.toString())
+            Log.d(
+                "AddContactActivity",
+                "${binding.nameInputET.text} --- ${binding.numberInputET.text}--- ${binding.emailInputET.text}"
+            )
 
 
-            Toast.makeText(this, "$names --- $numbers", Toast.LENGTH_SHORT).show()
+            Toast.makeText(this, "$names --- $numbers -- $email", Toast.LENGTH_SHORT).show()
+            finish()
         }
 
 
 
     }
 
-    fun addContact(name: String, number: String) {
-//        val storeData = StoreData( name, number)
+    fun addContact(name: String, number: String,email: String) {
+//        val storeData = StoreData( name, number, email)
         val cpo = ArrayList<ContentProviderOperation>()
+        val rawId = cpo.size
 
         cpo.add(
             ContentProviderOperation.newInsert(
@@ -53,7 +59,7 @@ class AddContactActivity : AppCompatActivity() {
                     ContactsContract.Data.CONTENT_URI
                 )
                     .withValueBackReference(
-                        ContactsContract.Data.RAW_CONTACT_ID, 0
+                        ContactsContract.Data.RAW_CONTACT_ID, rawId
                     )
                     .withValue(
                         ContactsContract.Data.MIMETYPE,
@@ -72,7 +78,7 @@ class AddContactActivity : AppCompatActivity() {
                 ContentProviderOperation.newInsert(
                     ContactsContract.Data.CONTENT_URI
                 )
-                    .withValueBackReference(ContactsContract.Data.RAW_CONTACT_ID, 0)
+                    .withValueBackReference(ContactsContract.Data.RAW_CONTACT_ID, rawId)
                     .withValue(
                         ContactsContract.Data.MIMETYPE,
                         ContactsContract.CommonDataKinds.Phone.CONTENT_ITEM_TYPE
@@ -88,12 +94,42 @@ class AddContactActivity : AppCompatActivity() {
                     .build()
             )
         }
+        if (email != null) {
+
+            cpo.add(
+                ContentProviderOperation.newInsert(
+                    ContactsContract.Data.CONTENT_URI
+                )
+                    .withValueBackReference(ContactsContract.Data.RAW_CONTACT_ID, 0)
+                    .withValue(
+                        ContactsContract.Data.MIMETYPE,
+                        ContactsContract.CommonDataKinds.Phone.CONTENT_ITEM_TYPE
+                    )
+                    .withValue(
+                        ContactsContract.CommonDataKinds.Email.ADDRESS,
+                        email
+                    )
+                    .withValue(
+                        ContactsContract.CommonDataKinds.Email.TYPE,
+                        ContactsContract.CommonDataKinds.Email.TYPE_MOBILE
+                    )
+                    .withYieldAllowed(true)
+                    .build()
+            )
+        }
+
+
         //  Asking the Contact provider to create a new contact
         try {
             contentResolver.applyBatch(ContactsContract.AUTHORITY, cpo)
-            val intent = Intent(this, MainActivity::class.java)
-            startActivity(intent)
-            finish()
+//            val intent = Intent(this, MainActivity::class.java)
+//            startActivity(intent)
+//            finish()
+
+//            super.onBackPressed()
+//            intent.flags = Intent.FLAG_ACTIVITY_CLEAR_TOP;
+
+
 
         } catch (e:java.lang.Exception) {
             e.printStackTrace()

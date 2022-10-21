@@ -22,11 +22,19 @@ class ContactRVAdapter(
 
 
 
+
+
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
         val itemView =
             LayoutInflater.from(context).inflate(R.layout.recyclerview_layout, parent, false)
         return ViewHolder(itemView)
     }
+
+    override fun getItemCount(): Int {
+
+        return contactData.size
+    }
+
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
         val currentItem: StoreData = contactData[position]
@@ -39,18 +47,24 @@ class ContactRVAdapter(
             intent.putExtra("contactId", currentItem.contactId)
             intent.putExtra("contactName", currentItem.contactName)
             intent.putExtra("contactNumber", currentItem.contactNumber)
-//            intent.putExtra("contactEmail", currentItem.contactEmail)
+            intent.putExtra("contactEmail", currentItem.contactEmail)
 
 //            intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK or Intent.FLAG_ACTIVITY_CLEAR_TOP
-
             context.startActivity(intent)
+//            context.activityResultRegistry.dispatchResult()
+//            context.startActivityForResult()
         }
+
+
+
+
     }
 
-    override fun getItemCount(): Int {
 
-        return contactData.size
-    }
+
+
+
+
 
 
 

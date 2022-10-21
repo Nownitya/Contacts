@@ -46,17 +46,33 @@ class ContactsDetailActivity : AppCompatActivity() {
 
 
 //        Log.d(TAG, "$contactId - $name - $number - $initialName")
-        Log.d(TAG, "$contactId - $name - $number ")
+        Log.d(TAG, "$contactId - $name - $number - $email ")
 
         binding.updateBT.setOnClickListener {
             updateContact(contactId)
-            val intent = Intent(this@ContactsDetailActivity, MainActivity::class.java)
-            startActivity(intent)
+//            val intent = Intent(this@ContactsDetailActivity, MainActivity::class.java)
+//            startActivity(intent)
+            super.onBackPressed()
+//            onBackPressed()
+            val intent = Intent()
             intent.flags =
                 Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK or Intent.FLAG_ACTIVITY_CLEAR_TOP
+//            this@ContactsDetailActivity.finishAffinity()
             this@ContactsDetailActivity.finish()
+
+
         }
 
+
+    }
+
+    //    override fun onBackPressed() {
+//        super.onBackPressed()
+//        Intent().flags = Intent.FLAG_ACTIVITY_CLEAR_TOP or Intent.FLAG_ACTIVITY_SINGLE_TOP
+//    }
+    override fun onBackPressed() {
+        super.onBackPressed()
+        moveTaskToBack(true)
 
     }
 
@@ -185,11 +201,13 @@ class ContactsDetailActivity : AppCompatActivity() {
             arrayOf(id)
         )
 
-        val intent = Intent(this@ContactsDetailActivity, MainActivity::class.java)
+//        val intent = Intent(this@ContactsDetailActivity, MainActivity::class.java)
+        val intent = Intent()
         startActivity(intent)
         intent.flags =
             Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK or Intent.FLAG_ACTIVITY_CLEAR_TOP
-        this@ContactsDetailActivity.finish()
+        super.onBackPressed()
+//        this@ContactsDetailActivity.finish()
 
 
     }

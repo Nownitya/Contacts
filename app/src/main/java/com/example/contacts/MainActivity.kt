@@ -22,6 +22,8 @@ class MainActivity : AppCompatActivity() {
 
     private lateinit var storeContactArrayList: ArrayList<StoreData>
     private var storeContactListD: ArrayList<StoreData>? = null
+    private val REQUEST_CODE = 1
+
 
 //    private var recyclerView: RecyclerView? = null
     private lateinit var contactRVAdapter: ContactRVAdapter         // changed from null to lateinit
@@ -36,7 +38,7 @@ class MainActivity : AppCompatActivity() {
         ContactsContract.CommonDataKinds.Phone.DISPLAY_NAME,
         ContactsContract.CommonDataKinds.Phone.NUMBER,
         ContactsContract.CommonDataKinds.Phone.CONTACT_ID,
-        ContactsContract.CommonDataKinds.Email.ADDRESS
+//        ContactsContract.CommonDataKinds.Email.ADDRESS
     ).toTypedArray()
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -64,7 +66,10 @@ class MainActivity : AppCompatActivity() {
 
         binding.floatingActionButton.setOnClickListener {
             val intent = Intent(this, AddContactActivity::class.java)
+//            startActivityForResult(intent,REQUEST_CODE)
+//            intent.flags = Intent.FLAG_ACTIVITY_CLEAR_TASK
             startActivity(intent)
+
         }
 
         binding.searchView.setOnQueryTextListener(object : SearchView.OnQueryTextListener,
@@ -86,6 +91,7 @@ class MainActivity : AppCompatActivity() {
                             storeContactListD.add(it)
 
                             Log.d(TAG, it.contactName!!.lowercase(Locale.getDefault()))
+//                            contactRVAdapter.notifyDataSetChanged()
 //
                         }
                     }
@@ -93,7 +99,7 @@ class MainActivity : AppCompatActivity() {
 //                    binding.recyclerview.adapter = contactRVAdapter
                     Log.d(TAG,"111")
 
-                    binding.recyclerview.adapter?.notifyDataSetChanged()
+                    contactRVAdapter.notifyDataSetChanged()
 //                    contactRVAdapter.notifyDataSetChanged()
                 } else {
                     Log.d(TAG,"222")
@@ -106,6 +112,17 @@ class MainActivity : AppCompatActivity() {
 
         })
     }
+
+//    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+//        super.onActivityResult(requestCode, resultCode, data)
+//        if (resultCode == REQUEST_CODE) {
+//            if (resultCode == RESULT_OK) {
+//                var intent = Intent()
+//                data?.getStringExtra("")
+//            }
+//        }
+//
+//    }
 
     private fun prepareRecyclerView() {
 
@@ -130,7 +147,7 @@ class MainActivity : AppCompatActivity() {
             ContactsContract.CommonDataKinds.Phone.DISPLAY_NAME     // sortOrder
         )
 
-        if (cursor?.count!! > 0) {
+        if (cursor!!.count>=0) {
             Log.d(TAG, cursor.count.toString())
             while (cursor.moveToNext()) {
 //                var contact = ContactsData()
@@ -142,46 +159,51 @@ class MainActivity : AppCompatActivity() {
                         cursor.getString(cursor.getColumnIndex(ContactsContract.CommonDataKinds.Phone.DISPLAY_NAME))
                     contactNumber =
                         cursor.getString(cursor.getColumnIndex(ContactsContract.CommonDataKinds.Phone.NUMBER))
-                    contactEmail =
-                        cursor.getString(cursor.getColumnIndex(ContactsContract.CommonDataKinds.Email.DATA))
+//                    contactEmail =
+//                        cursor.getString(cursor.getColumnIndex(ContactsContract.CommonDataKinds.Email.DATA))
 
-//                    storeContactArrayList.add(StoreData(contactId, displayName, contactNumber))
+                    storeContactArrayList.add(StoreData(contactId, displayName, contactNumber))
 
-                    val emails = applicationContext.contentResolver.query(
-                        ContactsContract.CommonDataKinds.Email.CONTENT_URI,
-                        arrayOf(ContactsContract.CommonDataKinds.Email.DATA1),
-                        ContactsContract.CommonDataKinds.Email.CONTACT_ID + " = "+ contactId ,
-                        null,
-                        null
-                    )
-                    if (emails?.count!! > 0) {
-                        while (emails.moveToNext()) {
-                            if (emails.moveToNext()) {
-                                val email =
-                                    emails.getString(emails.getColumnIndex(ContactsContract.CommonDataKinds.Email.ADDRESS))
-                                storeContactArrayList.add(StoreData(contactId, displayName, contactNumber, email))
-                                Log.d(TAG, "11223344")
-                            }
-                        }
-                    } else {
-                        storeContactArrayList.add(StoreData(contactId, displayName, contactNumber))
-                        Log.d(TAG, "5566778899")
-                    }
+//                    val emails = applicationContext.contentResolver.query(
+//                        ContactsContract.CommonDataKinds.Email.CONTENT_URI,
+//                        arrayOf(ContactsContract.CommonDataKinds.Email.DATA1),
+//                        ContactsContract.CommonDataKinds.Email.CONTACT_ID + " = "+ contactId ,
+//                        null,
+//                        null
+//                    )
+//                    if (emails?.count!! > 0) {
+//                        while (emails.moveToNext()) {
+//                            if (emails.moveToNext()) {
+//                                val email =
+//                                    emails.getString(emails.getColumnIndex(ContactsContract.CommonDataKinds.Email.ADDRESS))
+//                                storeContactArrayList.add(StoreData(contactId, displayName, contactNumber, email))
+//                                Log.d(TAG, "11223344")
+//                            }
+//                        }
+//                    } else {
+//                        storeContactArrayList.add(StoreData(contactId, displayName, contactNumber))
+//                        Log.d(TAG, "5566778899")
+//                    }
 
 //                    val aaa = cursor.getString(cursor.getColumnIndex(ContactsContract.Contacts.DISPLAY_NAME))
 //                    Log.d(TAG, "${contactId} - ${displayName} - $hasPhoneNumber")
 
 //                    storeContactArrayList.add(StoreData(contactId, displayName, contactNumber, contactEmail))
-                    Log.d(TAG, "$contactId $displayName  $contactNumber $emails")
+//                    Log.d(TAG, "$storeContactArrayList")
 //                    Log.d(TAG, aaa)
 
 
                 }
             }
         }
+//        Log.d(TAG, "$storeContactArrayList")
+        val conList = storeContactArrayList.indices
+        for (i in conList) {
+            Log.d(TAG,"(${storeContactArrayList[i]}")
+        }
         cursor.close()
 
-//        prepareRecyclerView()
+        prepareRecyclerView()
 
 //        contactRVAdapter = ContactRVAdapter(this,storeContactArrayList)
 //        binding.recyclerview.layoutManager = LinearLayoutManager(this)
@@ -198,7 +220,9 @@ class MainActivity : AppCompatActivity() {
         super.onResume()
 //        storeContactArrayList.clear()
 //        getContact()
-        contactRVAdapter?.notifyDataSetChanged()
+
+//        Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK or Intent.FLAG_ACTIVITY_CLEAR_TOP
+        contactRVAdapter.notifyDataSetChanged()
         Log.d(TAG, "onResume")
     }
 
@@ -232,5 +256,8 @@ class MainActivity : AppCompatActivity() {
 
     companion object {
         private val TAG = MainActivity::class.java.simpleName
+        private const val SORT_ORDER = "${ContactsContract.CommonDataKinds.Phone.DISPLAY_NAME} ASC"
+
+
     }
 }
