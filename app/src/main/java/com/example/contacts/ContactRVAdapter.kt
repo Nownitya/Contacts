@@ -21,9 +21,6 @@ class ContactRVAdapter(
     }
 
 
-
-
-
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
         val itemView =
             LayoutInflater.from(context).inflate(R.layout.recyclerview_layout, parent, false)
